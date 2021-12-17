@@ -50,14 +50,22 @@ async function inputToDate(fromDate, checkpoint, defaultOption = true) {  //use 
 function isDate(answer){  //give the userinput as a parameter
     let date = answer.split("");  //splits the userinput to single characters
     let calendar = answer.split("/");  //splits the userinput from slashes
+    let today = Math.round(+ new Date / 1000);  //define today as the current timestamp at the point of running the code
+    let testDate = Math.round(new Date(answer).getTime()/1000 + 7200);  //define testDate as the timestamp of got answer
     
     if (date.length === 10){  //check if there are 10 characters in the userinput (MM/DD/YYYY = 10 characters)
         if (date[2,5] === "/"){  //check if slashes are in correct places
             if (isNaN(date[0,1,3,4,6,7,8,9])){  //check if characters on MM + DD + YYYY are numbers
                 console.log("Incorrect format")
                 return false;
+            } else if (calendar[0] > 12 || calendar[1] > 31){  //forbids the user from entering a month larger than 12 or a day larger than 31
+                console.log("Date doesn't exist")
+                return false;
             } else if (calendar[2] < 2013 && calendar[0] < 04 && calendar[1] < 28){  //first day for data in coingeckos bitcoin charts is from 28th of April in 2013, checks if userinput is before that date
                 console.log("No data, please start from atleast 04/28/2013")
+                return false;
+            } else if (testDate > today){  //checks if given date is after today
+                console.log("Date is in the future")
                 return false;
             } else {
                 return true;
